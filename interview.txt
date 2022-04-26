@@ -83,3 +83,159 @@ Why use arrow functions almost everywhere?
    out for defining the scope. A developer can always look up the next-higher function statement
    to see what the thisObject is.
 
+#4 - Can you describe the main difference between a .forEach loop and a .map() loop and why you would pick one versus the other?
+
+Ans - Definitions
+      The map method receives a function as a parameter. Then it applies it on each element and 
+      returns an entirely new array populated with the results of calling the provided function.
+
+      This means that it returns a new array that contains an image of each element of the array.
+      It will always return the same number of items.
+      Ex. const myAwesomeArray = [5, 4, 3, 2, 1]
+                myAwesomeArray.map(x => x * x)
+
+                // >>>>>>>>>>>>>>>>> Output: [25, 16, 9, 4, 1]
+
+      Like map , the forEach() method receives a function as an argument and executes it once for 
+      each array element. However, instead of returning a new array like map, it returns undefined.
+
+      const myAwesomeArray = [
+        { id: 1, name: "john" },
+        { id: 2, name: "Ali" },
+        { id: 3, name: "Mass" },
+      ]
+
+      myAwesomeArray.forEach(element => console.log(element.name))
+      // >>>>>>>>> Output : john
+      //                    Ali
+      //                    Mass
+
+      Differences:
+      1. Retruning value - The first difference between map() and forEach() is the returning value.
+         The forEach() method returns undefined and map() returns a new array with the transformed 
+         elements. Even if they do the same job, the returning value remains different.
+      2. Ability to chain other methods - The second difference between these array methods is the
+         fact that map() is chainable. This means that you can attach reduce(), sort(), filter() and
+         so on after performing a map() method on an array. That's something you can't do with
+         forEach() because, as you might guess, it returns undefined.
+
+      The choice between map() and forEach() will depend on your use case. If you plan to change,
+      alternate, or use the data, you should pick map(), because it returns a new array with the
+      transformed data.
+      But, if you won't need the returned array, don't use map() - instead use forEach() or even a
+      for loop.
+
+#5 - Explain what is Hoisting in Javascript?
+
+Ans - In JavaScript, Hoisting is the default behavior of moving all the declarations at the top of the scope before code execution. Basically, it gives us an advantage that no matter where functions and variables are declared, they are moved to the top of their scope regardless of whether their scope is global or local. 
+      It allows us to call functions before even writing them in our code. 
+
+      Note: JavaScript only hoists declarations, not the initializations.
+
+      JavaScript allocates memory for all variables and functions defined in the program before execution.
+      Let us understand what exactly this is: 
+      The following is the sequence in which variable declaration and initialization occur. 
+
+      Declaration –> Initialisation/Assignment –> Usage 
+
+      // Variable lifecycle
+      let a;        // Declaration
+      a = 100;      // Assignment
+      console.log(a);  // Usage
+      However, since JavaScript allows us to both declare and initialize our variables simultaneously, this is the most used pattern:  
+
+      let a = 100;
+      Note: Always remember that in the background the Javascript is first declaring the variable and then initializing them. It is also good to know that variable declarations are processed before any code is executed. 
+
+      However, in javascript, undeclared variables do not exist until code assigning them is executed. Therefore, assigning a value to an undeclared variable implicitly creates it as a global variable when the assignment is executed. This means that all undeclared variables are global variables.
+
+      // Hoisting 
+      function codeHoist(){
+          a = 10;
+          let b = 50;
+      }
+      codeHoist();
+      
+      console.log(a); // 10
+      console.log(b); // ReferenceError : b is not defined
+
+      In the above code sample we created a function called codeHoist() and in there we have a variable which we didn’t declare using let/var/const and a let variable b. The undeclared variable is assigned the global scope by javascript hence we are able to print it outside the function, but in case of the variable b the scope is confined and it is not available outside and we get a ReferenceError.
+      Note: There’s a difference between ReferenceError and undefined error. An undefined error occurs when we have a variable that is either not defined or explicitly defined as type undefined. ReferenceError is thrown when trying to access a previously undeclared variable.
+
+      ES5 - When we talk about ES5, the variable that comes into our minds is var. Hoisting with var is somewhat different as when compared to let/const. Let’s make use of var and see how hoisting works:
+      // var code (global)
+      console.log(name); // undefined
+      var name = 'Mukul Latiyan';
+
+      In the above code we tried to console the variable name which was declared and assigned later than using it, the compiler gives us undefined which we didn’t expect as we should have got ReferenceError as we were trying to use name variable even before declaring it.
+
+      ES6 - We know that variables declared with let keywords are block scoped not function scoped and hence it is not any kind of problem when it comes to hoisting.
+      //let example(global)
+      console.log(name);
+      let name='Mukul Latiyan'; // ReferencError: name is not defined
+
+      Like before, for the var keyword, we expect the output of the log to be undefined. However, since the es6 let doesn’t take kindly on us using undeclared variables, the interpreter explicitly spits out a Reference error. This ensures that we always declare our variable first.
+      const behaves similar to let when it comes to hoisting.
+
+#6 - What is the Temporal Dead Zone in ES6?
+
+Ans - Temporal Dead Zome means some entity is temporarily in a lifeless or inactive state and cannot be used for any kind of work.
+      
+      Why temporal dead zone exists?
+      This question may arise that they are not in earlier javascript then why we need them, And 
+      why ECMAscript introduced this additional thing in new updates, actually in programs accessing
+      the variable before assigning a value is bad, Ok let’s say javascript has given some space to
+      variable in memory just because there is a specific reason that you may be going to store
+      some data there, then why to extract that data before actually putting. Most of the programming
+      languages have different configurations for this scenario, like C++ stores garbage before
+      initialization, python variable even doesn’t get created before initialization, and java stores
+      a default value.          
+      So javascript has undefined but because of the memory allocation phase hoisting of variables
+      takes place and during the thread execution phase we can access them, consequently, the value
+      appears as undefined. Later when the let & const were introduced they have some restrictions for
+      accessing just to help javascript developers write good code and make debugging easy and so the
+      new concept of temporal dead zone came along, it helps us to catch errors because accessing some
+      data before providing is wrong. This is a language construct that saves us from a lot of unexpected
+      errors. 
+
+      Ex 1 -
+      <script>
+          console.log(x);
+          var x = 6;
+          console.log(x);
+      </script>
+
+      Explanation: 
+
+      1. First of all the Global execution context will be created.
+      2. And then the memory allocation phase starts, During this, the variable x got a place in memory and javascript puts undefined there.
+      3. And then the thread execution phase starts, During this console.log(x) statement executes and prints the value store in x, which is undefined.
+      4. In the next line, there is x assigned to 6, and the undefined value of x gets replaced by 6.
+      5. Again at the next console.log(x), x gets printed as 6.
+
+      Ex 2 -
+      <script>
+          console.log(x);
+          console.log(z);
+          var x = 6;
+          let z = 6;
+          console.log(x);
+          console.log(z);
+      </script>
+
+      Explanation:
+
+      1. First of all the Global execution context will be created.
+      2. And then the memory allocation phase starts, During this, the variable x got a place in memory and javascript puts undefined there.
+      3. And then the variable z gets space in a different place of memory and same as variable x then undefined will be assigned as value.
+      4. Then the thread execution phase starts, During this console.log(x) statement executes and prints the value of x, which is undefined.
+      5. In the next line, there is console.log(z), javascript will throw ReferenceError and the program will stop here.
+
+      Scope of Variables: Now let’s see the scope where these variables are stored, notice the var x
+      is undefined and stored inside the global object and the let z is also undefined but stored at 
+      another place named Script, It means they both are not the same and the javascript engine wants 
+      to differ something during their access. The let and const variables are not accessible before 
+      they are initialized with some value, and the phase between the starting of the execution of 
+      block in which the let or const variable is declared till that variable is being initialized is 
+      called Temporal Dead Zone for the variable. And during this zone javascript will always through 
+      a reference error if anyone tries to access those variables.
