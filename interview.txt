@@ -1,0 +1,85 @@
+#1 - What are the differences between ES6 class and ES5 function constructors?
+
+Ans - Let's first look at example of each:
+// ES5 Function Constructor
+function Person(name) {
+  this.name = name;
+}
+
+// ES6 Class
+class Person {
+  constructor(name) {
+    this.name = name;
+  }
+}
+
+For simple constructors, they look pretty similar.
+
+The main difference in the constructor comes when using inheritance. If we want to create a Student
+class that subclasses Person and add a studentId field, this is what we have to do in addition to
+the above.
+
+// ES5 Function Constructor
+function Student(name, studentId) {
+  // Call constructor of superclass to initialize superclass-derived members.
+  Person.call(this, name);
+
+  // Initialize subclass's own members.
+  this.studentId = studentId;
+}
+
+Student.prototype = Object.create(Person.prototype);
+Student.prototype.constructor = Student;
+
+// ES6 Class
+class Student extends Person {
+  constructor(name, studentId) {
+    super(name);
+    this.studentId = studentId;
+  }
+}
+
+#2 - Explain the difference between Object.freeze() vs const
+
+Ans - const and Object.freeze are two completely different things.
+      const applies to bindings ("variables"). It creates an immutable binding, i.e. you cannot
+      assign a new value to the binding.
+
+const person = {
+    name: "Leonardo"
+};
+let animal = {
+    species: "snake"
+};
+person = animal; // ERROR "person" is read-only
+
+Object.freeze works on values, and more specifically, object values. It makes an object immutable,
+i.e. you cannot change its properties.
+
+let person = {
+    name: "Leonardo"
+};
+let animal = {
+    species: "snake"
+};
+Object.freeze(person);
+person.name = "Lima"; //TypeError: Cannot assign to read only property 'name' of object
+console.log(person);
+
+#3 - When should I use Arrow Functions in ES6?
+
+Ans - 
+Use function in the global scope and for Object.prototype properties.
+Use class for object constructors.
+Use => everywhere else.
+
+Why use arrow functions almost everywhere?
+1. Scope safety: When arrow functions are used consistently, everything is guaranteed to use the 
+   same thisObject as the root. If even a single standard function callback is mixed in with a 
+   bunch of arrow functions there's a chance the scope will become messed up.
+2. Compactness: Arrow functions are easier to read and write. (This may seem opinionated so I will
+   give a few examples further on).
+3. Clarity: When almost everything is an arrow function, any regular function immediately sticks
+   out for defining the scope. A developer can always look up the next-higher function statement
+   to see what the thisObject is.
+
